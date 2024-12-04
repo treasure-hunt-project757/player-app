@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="flutter_player">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>flutter_player</title>
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = "2911671914";
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  <script src="https://unpkg.com/audioplayers/web/audioplayers.js"></script>
+  <script src="https://unpkg.com/@zxing/library@0.19.1" type="application/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.3.1/dist/jsQR.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    /* Block access and add animation in landscape mode */
+    @media (orientation: landscape) {
+      body:before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
+        z-index: 9999;
+      }
+
+      body:after {
+        content: 'בבקשה סובבו את המסך למצב עומד';
+        position: fixed;
+        bottom: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        z-index: 10000;
+      }
+
+      .rotate-indicator {
+        position: fixed;
+        bottom: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 100px;
+        background-image: url('https://files.usiku.games/images/rotate_to_portrait.gif'); /* Replace with your animated GIF file */
+        background-size: contain;
+        background-repeat: no-repeat;
+        z-index: 10001;
+      }
+
+      .rotate-indicator-animation {
+        animation: bounce 2s infinite;
+      }
+
+      /* Animation for the indicator */
+      @keyframes bounce {
+        0%, 100% {
+          transform: translate(-50%, 0%);
+        }
+        50% {
+          transform: translate(-50%, -10%);
+        }
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="rotate-indicator rotate-indicator-animation"></div>
+
+  <script>
+    window.addEventListener('load', function(ev) {
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp();
+          });
+        }
+      });
+    });
+  </script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAa7JKpST13tyPfflHD0cAWUgEYlfwHXrU",
+      authDomain: "treasure-hunt-player-app.firebaseapp.com",
+      projectId: "treasure-hunt-player-app",
+      storageBucket: "treasure-hunt-player-app.firebasestorage.app",
+      messagingSenderId: "487862541234",
+      appId: "1:487862541234:web:1b354b1dde7b898d41e2ab"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+  </script>
+</body>
+</html>
