@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter_player/utils/ApiUrls.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
@@ -26,7 +27,8 @@ class _CameraPageState extends State<CameraPage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   bool _isUploading = false;
- final String? wakeup='https://custom-fastapi-service-791214719127.us-central1.run.app/predict';
+//  final String? wakeup='https://custom-fastapi-service-791214719127.us-central1.run.app/predict';
+  final String? wakeup = ApiUrls.modelServiceAPI;
   @override
   void initState() {
     super.initState();
@@ -70,7 +72,7 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-      final questionProvider = Provider.of<QuestionProvider>(context);
+    final questionProvider = Provider.of<QuestionProvider>(context);
     return Scaffold(
       extendBodyBehindAppBar:
           true, // Allows camera preview to extend under the AppBar
@@ -153,29 +155,29 @@ class _CameraPageState extends State<CameraPage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                                if (questionProvider.isLastUnit(widget.unitIndex)) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FinalScreen(
-                                correctAnswersCount:
-                                    questionProvider.correctAnswersCount,
-                                totalQuestions: questionProvider.units.length,
+                          if (questionProvider.isLastUnit(widget.unitIndex)) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => FinalScreen(
+                                  correctAnswersCount:
+                                      questionProvider.correctAnswersCount,
+                                  totalQuestions: questionProvider.units.length,
+                                ),
                               ),
-                            ),
-                          );
-                        } else {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HintDisplay(
-                                unitIndex: widget.unitIndex + 1,
-                                previousLocationImageUrl: questionProvider
-                                    .units.first.locationDTO.qrcodePublicUrl,
+                            );
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HintDisplay(
+                                  unitIndex: widget.unitIndex + 1,
+                                  previousLocationImageUrl: questionProvider
+                                      .units.first.locationDTO.qrcodePublicUrl,
+                                ),
                               ),
-                            ),
-                          );
-                        } // Go back after skipping
+                            );
+                          } // Go back after skipping
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
@@ -213,8 +215,7 @@ class _CameraPageState extends State<CameraPage> {
       final bytes =
           await _controller.takePicture().then((file) => file.readAsBytes());
 
-      final uri = Uri.parse(
-          '$wakeup');
+      final uri = Uri.parse('$wakeup/predict');
       final request = http.MultipartRequest('POST', uri)
         ..files.add(http.MultipartFile.fromBytes(
           'file',
